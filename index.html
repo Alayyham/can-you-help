@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can You Help?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--soft:#f4f6fa;--ink:#1d2433;--mute:#5e6b80;--line:#e2e7ef;--co:#ff6b4a;--te:#0e9f9f;--sun:#ffc23d;--ok:#1fae6b;--bad:#e5484d;color-scheme:light}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font:600 17px/1.55 Nunito,system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;font-weight:700;line-height:1.1;margin:0}
+h2{font-size:1.6rem}h3{font-size:1.2rem}
+.wrap{max-width:1040px;margin:0 auto;padding:16px 16px 70px}
+h1{font-size:clamp(2.6rem,9vw,5rem);letter-spacing:-.01em}
+h1 .q{color:var(--co)}h1 .h{color:var(--te)}
+.sub{color:var(--mute);max-width:62ch;margin:6px 0 0}
+.hero{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.hand{font-size:clamp(3rem,10vw,5rem);animation:wave 2.4s infinite;transform-origin:70% 70%}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%,40%{transform:rotate(-8deg)}}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0;position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);padding:8px 0;z-index:5;border-bottom:2px solid var(--line)}
+.btn,nav button{font:800 .95rem Nunito,sans-serif;border:2px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:12px;cursor:pointer;min-height:44px;box-shadow:0 2px 0 var(--line)}
+nav button[aria-selected=true],.btn.go{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:none}
+.btn.co{background:var(--co);border-color:var(--co);color:#fff;box-shadow:0 3px 0 #d94e2f}
+.btn.te{background:var(--te);border-color:var(--te);color:#fff;box-shadow:0 3px 0 #0a7d7d}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:#2a1d00;box-shadow:0 3px 0 #d9a21f}
+.btn.big{font-size:1.12rem;padding:12px 22px}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:3px solid var(--te);outline-offset:2px}
+[hidden]{display:none!important}
+.box{background:#fff;border:2px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 6px 18px rgba(29,36,51,.05)}
+.soft{background:var(--soft);border-color:transparent;box-shadow:none}
+.hint{color:var(--mute);font-size:.93rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.team{border:2px solid var(--line);border-radius:14px;padding:6px 14px;font-weight:800;background:#fff}
+.team b{font:700 1.7rem Fredoka;margin-left:6px}
+#tm0 b{color:var(--co)}#tm1 b{color:var(--te)}
+.team.on{border-color:var(--sun);box-shadow:0 0 0 3px rgba(255,194,61,.4)}
+.modes{display:flex;gap:8px;flex-wrap:wrap}
+/* role-play */
+.scene{text-align:center;padding:18px;border-radius:20px;background:linear-gradient(135deg,#fff3ee,#eafafa)}
+.scene .em{font-size:4rem;line-height:1}
+.scene .pl{font:700 1.7rem Fredoka;margin-top:4px}
+.scene .ty{display:inline-block;margin-top:6px;border-radius:999px;padding:2px 12px;font-weight:800;font-size:.85rem;color:#fff}
+.ty.req{background:var(--co)}.ty.off{background:var(--te)}
+.spin .em{animation:spinB .12s infinite}
+@keyframes spinB{50%{transform:translateY(-6px) scale(1.08)}}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:660px){.cards{grid-template-columns:1fr}}
+.rc{border-radius:18px;padding:14px;border:3px solid}
+.rc.A{border-color:var(--co);background:#fff7f4}.rc.B{border-color:var(--te);background:#f1fbfb}
+.rc h3{margin-bottom:6px}.rc.A h3{color:var(--co)}.rc.B h3{color:var(--te)}
+.rc .say{margin-top:8px;font-size:.92rem;color:var(--mute)}
+.secret{margin-top:10px;border-radius:14px;padding:10px;text-align:center;font-weight:800;border:2px dashed var(--te);cursor:pointer;background:#fff;width:100%;font:800 1rem Nunito;color:var(--ink);min-height:48px}
+.secret.yes{background:#e9f8f0;border:2px solid var(--ok);color:#0f6a41}
+.secret.no{background:#fdeeee;border:2px solid var(--bad);color:#9b2226}
+.chk{display:flex;gap:8px;flex-wrap:wrap}
+.chk button{font:800 .92rem Nunito;border:2px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer;min-height:40px;color:var(--ink)}
+.chk button.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.clock{font:700 2.6rem Fredoka;min-width:3.2ch}
+.bar{flex:1;min-width:120px;height:14px;background:var(--line);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:var(--te);transition:width 1s linear}.bar.low i{background:var(--co)}
+select{font:700 1rem Nunito,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 10px}
+/* quiz */
+.qs{font:700 1.35rem/1.3 Fredoka;margin:6px 0 12px}
+.opts{display:grid;gap:10px}
+.opt{font:800 1.08rem Nunito;text-align:left;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:14px;padding:12px 16px;cursor:pointer;min-height:52px;box-shadow:0 3px 0 var(--line)}
+.opt.v2{background:#e9f8f0;border-color:var(--ok)}.opt.v1{background:#fff8e6;border-color:var(--sun)}.opt.v0{background:#fdeeee;border-color:var(--bad)}
+.opt .tg{float:right;font-size:1.3rem}
+.meter{display:flex;height:16px;border-radius:9px;overflow:hidden;margin:6px 0 2px}
+.meter i{flex:1}.meter i:nth-child(1){background:var(--bad)}.meter i:nth-child(2){background:var(--sun)}.meter i:nth-child(3){background:var(--ok)}
+.fb{border-radius:14px;padding:12px;margin-top:10px;animation:pop .35s}
+.fb.v2{background:#e9f8f0}.fb.v1{background:#fff8e6}.fb.v0{background:#fdeeee}
+@keyframes pop{0%{transform:scale(.94);opacity:.2}100%{transform:none;opacity:1}}
+.prog{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}
+.prog i{width:18px;height:8px;border-radius:4px;background:var(--line)}.prog i.d{background:var(--te)}.prog i.c{background:var(--sun)}
+/* builder */
+.slot{min-height:64px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--soft)}
+.slot.ok{border:2px solid var(--ok);background:#e9f8f0}.slot.bad{border:2px solid var(--bad);background:#fdeeee;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.wd{font:800 1.08rem Nunito;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:8px 13px;cursor:pointer;min-height:46px;box-shadow:0 3px 0 var(--line)}
+.wd.used{visibility:hidden}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.situ{font-size:1.05rem;color:var(--mute)}
+/* language */
+table.pt{width:100%;border-collapse:collapse}.pt td,.pt th{border-bottom:2px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.ladder{display:grid;gap:6px}
+.lad{border-radius:12px;padding:8px 14px;font-weight:800;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.act ol{margin:6px 0;padding-left:1.2em}.act li{margin:3px 0}
+.tag{display:inline-block;background:var(--sun);color:#2a1d00;border-radius:999px;padding:1px 10px;font-weight:800;font-size:.8rem;margin:0 4px 6px 0}
+.tag.te{background:#dff5f5;color:#0a6d6d}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:50}
+#printArea{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+ body{font-size:11pt}
+ .wrap,#cf{display:none!important}#printArea{display:block}
+ #printArea h1{font-size:22pt;margin:0 0 3mm}#printArea h2{font-size:14pt;margin:4mm 0 2mm}
+ .ln{border-bottom:1px solid #888;height:9mm}
+ .cut{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+ .cut>div{border:2px dashed #000;border-radius:8px;padding:7px 9px;break-inside:avoid;font-size:10.5pt}
+ .cut.yn>div{height:45mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:13pt}
+ table.pt{width:100%;border-collapse:collapse}.pt td,.pt th{border:1px solid #000;padding:5px 7px;text-align:left}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <span class="hand" aria-hidden="true">🙋</span>
+ <div><h1><span class="q">Can</span> You <span class="h">Help?</span></h1>
+ <p class="sub">Social Club for Wall Street English N2. Make polite requests, offer help, and say yes or no — nicely — with <b>can</b> and <b>could</b>.</p></div>
+</header>
+<nav role="tablist" id="nav"></nav>
+
+<!-- PLAY -->
+<section class="panel" id="p-play">
+ <div class="box soft">
+  <div class="row">
+   <div class="team" id="tm0">Team A <b id="s0">0</b></div><div class="team" id="tm1">Team B <b id="s1">0</b></div>
+   <span style="margin-left:auto"></span><button class="btn" id="snd" aria-pressed="true">🔊 Sound on</button><button class="btn" id="rst">↺ Reset scores</button>
+  </div>
+  <div class="modes" id="modes"></div>
+ </div>
+
+ <!-- 1 role-play -->
+ <div id="g1">
+  <div class="box">
+   <div class="scene" id="scene"><div class="em">🎲</div><div class="pl">Spin a situation!</div><p class="hint">Two students come to the front: Student A and Student B.</p></div>
+   <div class="row" style="justify-content:center"><button class="btn co big" id="spin">🎲 Spin a situation</button>
+    <select id="flt" aria-label="Type"><option value="all">Requests + offers</option><option value="req">Requests only</option><option value="off">Offers only</option></select></div>
+   <div class="cards" id="rcards"></div>
+  </div>
+  <div class="box" id="rpTools" hidden>
+   <div class="row"><div class="clock" id="clk">01:30</div><div class="bar" id="bar"><i></i></div>
+    <select id="len" aria-label="Seconds"><option value="60">1 min</option><option value="90" selected>1½ min</option><option value="120">2 min</option></select>
+    <button class="btn go" id="stT">▶ Start role-play</button></div>
+   <h3 style="margin:10px 0 6px">👀 Audience: tick what you heard</h3>
+   <div class="chk" id="chk"></div>
+   <div class="row"><button class="btn co" id="ptA">+ points to Team A</button><button class="btn te" id="ptB">+ points to Team B</button><span class="hint" id="ptMsg"></span></div>
+  </div>
+ </div>
+
+ <!-- 2 politeness meter -->
+ <div id="g2" hidden>
+  <div class="box">
+   <div class="row"><h2 style="margin-right:auto">How polite is it?</h2><span class="hint">Turn: <b id="turn2"></b></span></div>
+   <div class="prog" id="prog2"></div>
+   <div class="situ" id="qn2"></div>
+   <div class="qs" id="qs2"></div>
+   <div class="opts" id="opts2"></div>
+   <div id="fb2"></div>
+   <div class="row"><button class="btn go big" id="nx2" hidden>Next ▶</button></div>
+  </div>
+  <div class="box soft"><b>Politeness meter</b><div class="meter"><i></i><i></i><i></i></div><div class="row hint" style="justify-content:space-between;margin:0"><span>😬 Rude or wrong · 0</span><span>🙂 OK · 1</span><span>😊 Perfect · 2</span></div></div>
+ </div>
+
+ <!-- 3 sentence builder -->
+ <div id="g3" hidden>
+  <div class="box">
+   <div class="row"><h2 style="margin-right:auto">Build the sentence</h2><span class="hint">Turn: <b id="turn3"></b></span></div>
+   <div class="prog" id="prog3"></div>
+   <p class="situ" id="sit3"></p>
+   <div class="slot" id="slot"></div>
+   <div class="pool" id="pool"></div>
+   <div class="row"><button class="btn te big" id="chk3">✔ Check</button><button class="btn" id="clr3">⌫ Clear</button><button class="btn" id="hint3">💡 First word (−1)</button><button class="btn go" id="nx3" hidden>Next ▶</button></div>
+   <div id="fb3"></div>
+  </div>
+ </div>
+
+ <!-- 4 help chain -->
+ <div id="g4" hidden>
+  <div class="box">
+   <h2>Help chain ⛓️</h2>
+   <p class="hint">Whole class! The first student makes a request to the next student. That student answers (yes or no + reason), then makes a <b>new</b> request to the next person. Don’t break the chain!</p>
+   <div class="scene" id="chainCard"><div class="em">🔗</div><div class="pl">Press “Next request”</div></div>
+   <div class="row" style="justify-content:center"><button class="btn sun big" id="chainNext">➡ Next request</button><button class="btn" id="chainAns">🎲 Yes or no?</button></div>
+   <div id="chainOut"></div>
+   <div class="row" style="justify-content:center"><span class="hint">Chain length: <b id="chainN" style="font:700 1.6rem Fredoka;color:var(--co)">0</b></span><button class="btn" id="chainBreak">💥 Chain broke! Start again</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- LANGUAGE -->
+<section class="panel" id="p-lang" hidden>
+ <div class="box"><h2>Can or could?</h2>
+  <p class="hint"><b>Could</b> is more polite than <b>can</b>. Use <b>could</b> with strangers, your boss, or when you ask for something big.</p>
+  <div class="ladder" id="ladder"></div></div>
+ <div class="box"><h3>The language box</h3><table class="pt" id="lb"></table></div>
+ <div class="box"><h3>⚠️ Watch out!</h3><table class="pt" id="mist"></table></div>
+</section>
+
+<!-- IDEAS -->
+<section class="panel" id="p-ideas" hidden>
+ <div class="box"><h2>Activity ideas</h2><p class="hint">My own ideas, built around the games on the Play tab. Mix and match.</p></div>
+ <div class="grid" id="ideas"></div>
+ <div class="box"><h3>Suggested 60-minute session</h3><table class="pt" id="plan"></table></div>
+</section>
+
+<!-- PRINT -->
+<section class="panel" id="p-print" hidden>
+ <div class="box"><h2>Printables</h2><p class="hint">Print or choose “Save as PDF”.</p></div>
+ <div class="grid" id="prGrid"></div>
+</section>
+</div>
+<canvas id="cf"></canvas>
+<div id="printArea"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+/* ---------- data ---------- */
+const SC=[
+{e:"🏠",p:"At home",t:"req",a:"Your flatmate is playing loud music. You have an exam tomorrow. Ask them to turn it down.",b:"You are the flatmate. Some friends are visiting and you are having fun.",y:"Of course — sorry, I didn’t know!",n:"I’m sorry, I can’t. My friends are here until 10."},
+{e:"🏢",p:"At work",t:"req",a:"You have a big report to finish. Ask your colleague to help you this afternoon.",b:"You are the colleague. You have a meeting at three.",y:"Sure, I can help you after lunch.",n:"I’m afraid I can’t. I have a meeting at three."},
+{e:"🚆",p:"On the train",t:"req",a:"It is very hot. Ask the passenger next to you if you can open the window.",b:"You are the passenger. You feel a little cold.",y:"Yes, of course. It is hot in here!",n:"Sorry, I’d rather not. I’m a bit cold."},
+{e:"☕",p:"In a café",t:"req",a:"Ask the waiter for a glass of water and the Wi-Fi password.",b:"You are the waiter. The café is very busy.",y:"Of course. Here you are — the password is on the menu.",n:"Sorry, we don’t have Wi-Fi. But I can bring you some water."},
+{e:"🛒",p:"In the supermarket",t:"off",a:"An old lady can’t reach a box on the top shelf. Offer to help her.",b:"You are the old lady. You can’t reach the box.",y:"Oh, yes please! That’s very kind of you.",n:"Thanks, but my grandson is coming to help me."},
+{e:"📚",p:"In class",t:"req",a:"You forgot your pen. Ask your classmate if you can borrow one.",b:"You are the classmate. You only have one pen.",y:"Sure, here you are. I have two.",n:"Sorry, I only have one. Ask the teacher!"},
+{e:"🧳",p:"At the airport",t:"off",a:"A tourist is trying to carry three heavy suitcases. Offer to help.",b:"You are the tourist. Your bags are very heavy.",y:"Yes, please! Could you carry this one?",n:"No, thanks. I’m fine. There’s a trolley over there."},
+{e:"🏥",p:"At the doctor’s",t:"req",a:"Call the receptionist. Ask if you can change your appointment to Friday.",b:"You are the receptionist. Friday is full, but Thursday is free.",y:"Yes, I can do Friday at ten o’clock.",n:"I’m afraid Friday is full. Could you come on Thursday?"},
+{e:"🐱",p:"Next door",t:"req",a:"You are going away this weekend. Ask your neighbour to look after your cat.",b:"You are the neighbour. You are allergic to cats!",y:"No problem. I love cats!",n:"I’m sorry, I can’t. I’m allergic to cats."},
+{e:"🗺️",p:"In the street",t:"req",a:"You are lost. Ask a stranger to show you the way to the station.",b:"You are the stranger. You know the way.",y:"Sure! Go straight on and turn left at the bank.",n:"Sorry, I’m not from here. Could you ask in that shop?"},
+{e:"🎉",p:"Before a party",t:"off",a:"Your friend is preparing a big party and looks stressed. Offer to help (cooking, music, decorating…).",b:"You are the friend. You have too much to do.",y:"Really? Thank you! Could you make a cake?",n:"That’s kind, but everything is ready. Just come and have fun!"},
+{e:"💼",p:"In the office",t:"req",a:"Ask your boss if you can leave early on Friday. Explain why.",b:"You are the boss. There is an important meeting on Friday afternoon.",y:"Yes, you can. Have a nice weekend!",n:"I’m afraid not. We have an important meeting at four."},
+{e:"🏨",p:"At the hotel",t:"req",a:"Ask the receptionist to wake you up at 6 a.m. and to call a taxi for you.",b:"You are the receptionist. You can do both.",y:"Of course. We’ll call your room at six.",n:"I can wake you up, but taxis don’t come before seven, I’m afraid."},
+{e:"🚲",p:"At home",t:"req",a:"Ask your brother or sister if you can borrow their bike this afternoon.",b:"You are the brother or sister. You need the bike to go to football.",y:"Yes, you can. But please bring it back by six!",n:"Sorry, I can’t. I need it for football."},
+{e:"👶",p:"At your sister’s house",t:"off",a:"Your sister has a new baby and looks very tired. Offer to help.",b:"You are the sister. You are very tired.",y:"Oh, yes please! Could you do the shopping?",n:"Thanks, but my husband is helping. Could you come tomorrow?"},
+{e:"💻",p:"In the library",t:"off",a:"A student’s laptop isn’t working and they look worried. Offer to help.",b:"You are the student. Your essay is due today!",y:"Yes, please! Can you see what’s wrong?",n:"Thanks, but the IT man is coming."}];
+const CHK=["can / could","please","a reason","thank you","polite yes or no"];
+const QZ=[
+{s:"You want your boss to check your email.",o:[["Check my email.",0],["Can you check my email?",1],["Could you check my email, please?",2]],x:"With a boss, “Could you…, please?” is the most polite."},
+{s:"Your friend asks: “Can you help me move house on Saturday?” You are working.",o:[["No.",0],["I can’t, sorry.",1],["Sorry, I can’t. I’m working on Saturday.",2]],x:"A polite “no” = sorry + can’t + a reason."},
+{s:"In a shop, the assistant asks: “Can I help you?” You are just looking.",o:[["No, I don’t want.",0],["No, thanks. I’m just looking.",2],["No.",0]],x:"Say “No, thanks” — never just “No” to an offer."},
+{s:"In class. You want to open the window.",o:[["I open the window.",0],["Can I open the window?",1],["Could I open the window, please?",2]],x:"Ask for permission with “Can I…?” or (more polite) “Could I…?”."},
+{s:"A colleague’s printer isn’t working. Offer to help.",o:[["Can I help you with that?",2],["Your printer is bad.",0],["Do you help?",0]],x:"Offer help with “Can I help you?” or “I can… for you.”"},
+{s:"You want to know the time. Ask a stranger.",o:[["What time?",0],["Can you tell me the time?",1],["Excuse me, could you tell me the time, please?",2]],x:"With strangers: Excuse me + could you + please."},
+{s:"Your friend says: “I can carry that for you.” You want help.",o:[["Carry it.",0],["Yes.",1],["Thanks, that’s very kind of you!",2]],x:"Accept an offer with thanks: “Thanks, that’s very kind of you!”"},
+{s:"Your neighbour asks: “Could you water my plants?” You can.",o:[["Yes, I could.",0],["OK.",1],["Sure, no problem!",2]],x:"Answering a request, don’t say “Yes, I could.” Say “Sure!”, “Of course!”, “No problem!”"},
+{s:"Choose the correct sentence.",o:[["Could you to help me?",0],["Could you help me?",2],["Could you helping me?",0]],x:"can / could + verb (no “to”, no “-ing”)."},
+{s:"A hotel guest asks: “Could I have a late checkout?” It isn’t possible.",o:[["No, you couldn’t.",0],["No.",0],["I’m afraid that’s not possible, sorry.",2]],x:"“I’m afraid…” makes a “no” soft and polite."},
+{s:"Your little brother asks: “Can I use your laptop?” You say yes.",o:[["Yes, you can.",2],["Yes, you could.",0],["Yes, I can.",0]],x:"Giving permission: “Yes, you can.” (not “you could”)."},
+{s:"You are in a restaurant. You want to pay.",o:[["Bill!",0],["Can we have the bill?",1],["Could we have the bill, please?",2]],x:"“Could we have…, please?” is perfect in a restaurant."}];
+const BS=[
+{s:"A box is very heavy. Ask a stranger for help.",w:"Could you help me with this box, please?"},
+{s:"You forgot your pen.",w:"Can I borrow your pen?"},
+{s:"Refuse politely. You are busy.",w:"I’m sorry, I can’t. I’m busy."},
+{s:"Offer help to a tourist with bags.",w:"Can I help you with your bags?"},
+{s:"Your teacher speaks too fast.",w:"Could you speak more slowly, please?"},
+{s:"It’s hot in the classroom.",w:"Could I open the window, please?"},
+{s:"Somebody helped you.",w:"Thanks, that’s very kind of you."},
+{s:"Say no to a party invitation.",w:"I’m afraid I can’t come on Friday."},
+{s:"You are lost in a new city.",w:"Could you tell me the way to the station?"},
+{s:"Say no to an offer.",w:"No, thanks. I’m fine."}];
+const CHAIN=["…lend you a pen?","…help you with your homework?","…open the door?","…give you a lift home?","…tell you the time?","…water your plants?","…look after your dog?","…make you a coffee?","…carry your bag?","…call you back later?","…send you the photos?","…speak more slowly?","…help you cook dinner?","…lend you some money?","…show you the way to the bank?","…take a photo of you?","…turn the music down?","…pick you up from the airport?"];
+const YESR=["Sure!","Of course!","No problem!","Yes, of course.","Yes, I can do that."];
+const NOR=["I’m sorry, I can’t. I’m…","I’m afraid I can’t, because…","Sorry, I can’t right now. Maybe later?","I’d love to, but…"];
+/* ---------- fx ---------- */
+let AC=null,snd=true;
+const ac=()=>{if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}return AC};
+function tone(f,d,t="sine",v=.2,at=0){if(!snd)return;const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=t;o.frequency.value=f;o.connect(g);g.connect(a.destination);const s=a.currentTime+at;g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.start(s);o.stop(s+d)}
+const ding=()=>{tone(880,.25);tone(1175,.35,"sine",.2,.12)};
+const whoosh=()=>{tone(300,.25,"sawtooth",.08);tone(500,.25,"sawtooth",.08,.08)};
+const tada=()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.3,"triangle",.22,i*.09));
+const buzz=()=>tone(150,.4,"sawtooth",.2);
+$("#snd").onclick=()=>{snd=!snd;$("#snd").textContent=snd?"🔊 Sound on":"🔇 Sound off";$("#snd").setAttribute("aria-pressed",snd)};
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function confetti(){if(reduce)return;const c=$("#cf"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#ff6b4a","#0e9f9f","#ffc23d","#1fae6b","#7a6cff"];const P=Array.from({length:140},()=>({x:innerWidth/2+(Math.random()-.5)*240,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,r:Math.random()*6+3,c:pick(cols),rot:Math.random()*6}));let f=0;(function s(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.rot+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.rot);x.fillStyle=p.c;x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(++f<130)requestAnimationFrame(s);else x.clearRect(0,0,c.width,c.height)})()}
+function mkTimer(clk,bar,getSec){let t=null,left=getSec();const draw=()=>{clk.textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0");bar.querySelector("i").style.width=Math.min(100,left/getSec()*100)+"%";bar.classList.toggle("low",left<=10)};
+ const stop=()=>{clearInterval(t);t=null};
+ return{reset(){stop();left=getSec();draw()},start(sec,onEnd){stop();if(sec)left=sec;draw();const t0=Date.now(),l0=left;t=setInterval(()=>{left=Math.max(0,l0-Math.round((Date.now()-t0)/1000));draw();if(left<=10&&left>0)tone(800,.07,"square",.06);if(left<=0){stop();buzz();clk.textContent="Time!";onEnd&&onEnd()}},250)},stop,running:()=>!!t}}
+/* ---------- tabs & teams ---------- */
+const TB=[["play","Play"],["lang","Language"],["ideas","Ideas"],["print","Printables"]];
+TB.forEach(([id,l],i)=>{const b=document.createElement("button");b.role="tab";b.textContent=l;b.setAttribute("aria-selected",!i);b.onclick=()=>{$$("#nav button").forEach(x=>x.setAttribute("aria-selected",x===b));TB.forEach(([t])=>$("#p-"+t).hidden=t!==id);scrollTo(0,0)};$("#nav").appendChild(b)});
+let sc=[0,0],turn=0,mode=1;
+function score(){$("#s0").textContent=sc[0];$("#s1").textContent=sc[1];$("#tm0").classList.toggle("on",(mode===2||mode===3)&&turn===0);$("#tm1").classList.toggle("on",(mode===2||mode===3)&&turn===1);
+ $$(".turnName").forEach(e=>e.textContent="Team "+"AB"[turn]);$("#turn2").textContent=$("#turn3").textContent="Team "+"AB"[turn]}
+$("#rst").onclick=()=>{sc=[0,0];score()};
+const MODES=[[1,"🎭 Role-play roulette"],[2,"😊 How polite is it?"],[3,"🧩 Build the sentence"],[4,"⛓️ Help chain"]];
+MODES.forEach(([m,l])=>{const b=document.createElement("button");b.className="btn";b.textContent=l;b.dataset.m=m;b.onclick=()=>{mode=m;[1,2,3,4].forEach(i=>$("#g"+i).hidden=i!==m);$$("#modes .btn").forEach(x=>x.classList.toggle("go",+x.dataset.m===m));score();whoosh()};$("#modes").appendChild(b)});
+$("#modes .btn").classList.add("go");
+/* ---------- 1 role-play ---------- */
+let cur=null,secret=null,ticks=new Set();
+const rt=mkTimer($("#clk"),$("#bar"),()=>+$("#len").value);
+$("#len").onchange=()=>rt.reset();
+$("#stT").onclick=()=>{if(rt.running()){rt.reset();$("#stT").textContent="▶ Start role-play";return}$("#stT").textContent="■ Stop";ding();rt.start(+$("#len").value,()=>$("#stT").textContent="▶ Start role-play")};
+function sceneHTML(s){return`<div class="em">${s.e}</div><div class="pl">${esc(s.p)}</div><span class="ty ${s.t}">${s.t==="req"?"🙏 Request":"🤝 Offer"}</span>`}
+$("#spin").onclick=()=>{const f=$("#flt").value,pool=SC.filter(s=>f==="all"||s.t===f);
+ $("#spin").disabled=true;$("#rcards").innerHTML="";$("#rpTools").hidden=true;rt.reset();$("#stT").textContent="▶ Start role-play";
+ let n=0,steps=reduce?1:14;const sc_=$("#scene");sc_.classList.add("spin");
+ (function roll(){const s=pick(pool);sc_.innerHTML=sceneHTML(s);tone(400+n*30,.05,"square",.06);
+  if(++n<steps)setTimeout(roll,60+n*12);else{let fin;do{fin=pick(pool)}while(pool.length>1&&fin===cur);cur=fin;sc_.classList.remove("spin");sc_.innerHTML=sceneHTML(cur);showCards();$("#spin").disabled=false;ding()}})()};
+function showCards(){const s=cur;secret=Math.random()<.5?"y":"n";ticks=new Set();
+ const aSay=s.t==="req"?"Could you…, please? / Can I…? / Could I…?":"Can I help you? / I can… for you. / Do you want me to…?";
+ const bSay=s.t==="req"?"Yes: Sure! / Of course! · No: I’m sorry, I can’t… / I’m afraid…":"Yes: Yes, please! That’s very kind. · No: No, thanks. I’m fine.";
+ $("#rcards").innerHTML=`<div class="rc A"><h3>🅰 Student A</h3><div>${esc(s.a)}</div><div class="say">💬 ${esc(aSay)}</div></div>
+ <div class="rc B"><h3>🅱 Student B</h3><div>${esc(s.b)}</div><div class="say">💬 ${esc(bSay)}</div>
+ <button class="secret" id="sec">🤫 Student B only: tap to see your answer</button></div>`;
+ $("#sec").onclick=()=>{const b=$("#sec");if(b.dataset.on){b.className="secret";b.textContent="🤫 Student B only: tap to see your answer";delete b.dataset.on;return}b.dataset.on=1;
+  b.className="secret "+(secret==="y"?"yes":"no");b.innerHTML=secret==="y"?`✅ Say YES!<br><small>e.g. “${esc(s.y)}”</small>`:`❌ Say NO — politely, with a reason!<br><small>e.g. “${esc(s.n)}”</small>`;tone(700,.1)};
+ $("#rpTools").hidden=false;renderChk()}
+function renderChk(){$("#chk").innerHTML=CHK.map((c,i)=>`<button data-i="${i}" class="${ticks.has(i)?"on":""}">${ticks.has(i)?"✔ ":""}${c}</button>`).join("");
+ $$("#chk button").forEach(b=>b.onclick=()=>{const i=+b.dataset.i;ticks.has(i)?ticks.delete(i):ticks.add(i);tone(600,.06);renderChk()});
+ $("#ptMsg").textContent=`${ticks.size} point${ticks.size===1?"":"s"} to give`}
+function give(t){if(!ticks.size){buzz();return}sc[t]+=ticks.size;$("#ptMsg").textContent=`+${ticks.size} to Team ${"AB"[t]}!`;ticks=new Set();renderChk();score();ticks.size||0;tada();if(sc[t]%10<3)confetti()}
+$("#ptA").onclick=()=>give(0);$("#ptB").onclick=()=>give(1);
+/* ---------- 2 politeness ---------- */
+let qOrder=shuffle(QZ.map((_,i)=>i)),qi=0,qDone=false,qRes=[];
+function q2(){const done=qi>=qOrder.length;
+ $("#prog2").innerHTML=qOrder.map((_,i)=>`<i class="${i<qi?(qRes[i]===2?"d":"c"):""}"></i>`).join("");
+ if(done){$("#qn2").textContent="";$("#qs2").textContent="🎉 Finished! Well done, everyone.";$("#opts2").innerHTML="";$("#fb2").innerHTML=`<div class="row"><button class="btn go big" id="again2">↺ Play again</button></div>`;$("#nx2").hidden=true;$("#again2").onclick=()=>{qOrder=shuffle(QZ.map((_,i)=>i));qi=0;qRes=[];q2()};tada();confetti();return}
+ const q=QZ[qOrder[qi]];qDone=false;
+ $("#qn2").textContent=`Question ${qi+1} of ${qOrder.length}`;$("#qs2").textContent=q.s;$("#fb2").innerHTML="";$("#nx2").hidden=true;
+ const opts=shuffle(q.o);
+ $("#opts2").innerHTML=opts.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o[0])}</button>`).join("");
+ $$("#opts2 .opt").forEach(b=>b.onclick=()=>{if(qDone)return;qDone=true;const o=opts[+b.dataset.i],v=o[1];
+  $$("#opts2 .opt").forEach((x,j)=>{const vv=opts[j][1];x.classList.add("v"+vv);x.insertAdjacentHTML("beforeend",`<span class="tg">${["😬","🙂","😊"][vv]}</span>`)});
+  b.style.outline="4px solid var(--ink)";
+  sc[turn]+=v;qRes[qi]=v;
+  $("#fb2").innerHTML=`<div class="fb v${v}"><b>${["😬 Oops! 0 points.","🙂 OK — 1 point. Can you make it more polite?","😊 Perfect — 2 points!"][v]}</b><br>${esc(q.x)}</div>`;
+  [buzz,ding,tada][v]();if(v===2&&!reduce)confetti();
+  turn=1-turn;score();$("#nx2").hidden=false})}
+$("#nx2").onclick=()=>{qi++;q2()};
+/* ---------- 3 builder ---------- */
+let bOrder=shuffle(BS.map((_,i)=>i)),bi=0,built=[],toks=[],bDone=false,hinted=false,bRes=[];
+function b3(){const done=bi>=bOrder.length;
+ $("#prog3").innerHTML=bOrder.map((_,i)=>`<i class="${i<bi?(bRes[i]?"d":"c"):""}"></i>`).join("");
+ if(done){$("#sit3").textContent="🎉 All sentences built!";$("#slot").innerHTML="";$("#pool").innerHTML="";$("#fb3").innerHTML=`<button class="btn go big" id="again3">↺ Play again</button>`;$("#again3").onclick=()=>{bOrder=shuffle(BS.map((_,i)=>i));bi=0;bRes=[];newB()};["chk3","clr3","hint3","nx3"].forEach(id=>$("#"+id).hidden=true);tada();confetti();return}
+ ["chk3","clr3","hint3"].forEach(id=>$("#"+id).hidden=bDone);$("#nx3").hidden=!bDone;
+ const b=BS[bOrder[bi]];$("#sit3").innerHTML=`<b>Situation:</b> ${esc(b.s)}`;
+ $("#slot").className="slot"+(bDone?(bRes[bi]?" ok":" bad"):"");
+ $("#slot").innerHTML=built.length?built.map((ti,k)=>`<button class="wd" data-k="${k}">${esc(toks[ti])}</button>`).join(""):`<span class="hint">Tap the words in the right order…</span>`;
+ $("#pool").innerHTML=toks.map((t,i)=>`<button class="wd ${built.includes(i)?"used":""}" data-i="${i}">${esc(t)}</button>`).join("");
+ if(!bDone){$$("#pool .wd").forEach(e=>e.onclick=()=>{const i=+e.dataset.i;if(built.includes(i))return;built.push(i);tone(520+built.length*25,.06);b3()});
+  $$("#slot .wd").forEach(e=>e.onclick=()=>{built.splice(+e.dataset.k,1);tone(300,.06);b3()})}}
+function newB(){if(bi<bOrder.length){toks=shuffle(BS[bOrder[bi]].w.split(" "));let g=0;while(toks.join(" ")===BS[bOrder[bi]].w&&g++<10)toks=shuffle(toks)}built=[];bDone=false;hinted=false;$("#fb3").innerHTML="";["chk3","clr3","hint3"].forEach(id=>$("#"+id).hidden=false);b3()}
+$("#clr3").onclick=()=>{built=[];b3()};
+$("#hint3").onclick=()=>{if(hinted||bDone)return;hinted=true;const first=BS[bOrder[bi]].w.split(" ")[0];const i=toks.findIndex((t,j)=>t===first&&!built.includes(j));built=[i,...built.filter(x=>x!==i)];sc[turn]=Math.max(0,sc[turn]-1);score();tone(700,.1);b3()};
+$("#chk3").onclick=()=>{const target=BS[bOrder[bi]].w;if(built.length<toks.length){$("#fb3").innerHTML=`<div class="fb v1">Use all the words!</div>`;buzz();return}
+ const ok=built.map(i=>toks[i]).join(" ")===target;bDone=true;bRes[bi]=ok;
+ if(ok){sc[turn]+=2;$("#fb3").innerHTML=`<div class="fb v2"><b>😊 Correct! +2 for Team ${"AB"[turn]}.</b> Now say it aloud — politely!</div>`;tada()}
+ else{$("#fb3").innerHTML=`<div class="fb v0"><b>😬 Not quite.</b> The answer is: <b>${esc(target)}</b></div>`;buzz()}
+ turn=1-turn;score();b3()};
+$("#nx3").onclick=()=>{bi++;newB()};
+/* ---------- 4 chain ---------- */
+let chainN=0;
+$("#chainNext").onclick=()=>{const r=pick(CHAIN),st=pick(["Could you","Can you"]);chainN++;$("#chainN").textContent=chainN;
+ $("#chainCard").innerHTML=`<div class="em">${pick(["🙋","🙏","🤝","💬","😊"])}</div><div class="pl">${st} ${esc(r.replace("…",""))}</div><p class="hint">Ask the next person. Then they answer and ask someone new!</p>`;$("#chainOut").innerHTML="";ding()};
+$("#chainAns").onclick=()=>{const y=Math.random()<.55;$("#chainOut").innerHTML=`<div class="fb ${y?"v2":"v0"}" style="text-align:center;font-size:1.15rem"><b>${y?"✅ Say YES: "+esc(pick(YESR)):"❌ Say NO: "+esc(pick(NOR))}</b></div>`;tone(y?800:300,.15)};
+$("#chainBreak").onclick=()=>{if(chainN>=5)tada();else buzz();$("#chainCard").innerHTML=`<div class="em">💥</div><div class="pl">Chain broken at ${chainN}! Can you beat it?</div>`;chainN=0;$("#chainN").textContent=0;$("#chainOut").innerHTML=""};
+/* ---------- language ---------- */
+$("#ladder").innerHTML=[["#e5484d","😬 Give me your pen.","Too direct"],["#f08c00","🙂 Can I borrow your pen?","Friends & family"],["#0e9f9f","😊 Could I borrow your pen, please?","Polite"],["#1fae6b","🌟 Excuse me, could I possibly borrow your pen, please?","Very polite"]].map(r=>`<div class="lad" style="background:${r[0]}">${esc(r[1])} <span style="float:right;opacity:.9">${r[2]}</span></div>`).join("");
+const LB=[["🙏 Asking someone to do something","Can you…? / Could you…, please?","Could you help me with this box, please?"],["🔑 Asking for permission","Can I…? / Could I…, please?","Could I open the window?"],["🤝 Offering help","Can I help you? / I can… for you. / Do you want me to…?","I can carry that for you."],["✅ Saying yes to a request","Sure! / Of course. / No problem.","Sure, no problem!"],["❌ Saying no to a request","I’m sorry, I can’t. + reason / I’m afraid…","I’m afraid I can’t. I’m working."],["😊 Accepting an offer","Yes, please. / Thanks, that’s very kind of you.","Yes, please! That’s very kind."],["🙅 Refusing an offer","No, thanks. I’m fine. / That’s kind, but…","No, thanks. I’m OK."]];
+$("#lb").innerHTML=LB.map(r=>`<tr><td><b>${r[0]}</b></td><td>${esc(r[1])}<br><span class="hint">${esc(r[2])}</span></td></tr>`).join("");
+$("#mist").innerHTML=[["❌ Could you <u>to</u> help me?","✅ Could you help me?"],["❌ Yes, I could. (answering a request)","✅ Sure! / Of course!"],["❌ Yes, you could. (giving permission)","✅ Yes, you can."],["❌ No. (to an offer)","✅ No, thanks."],["❌ I can’t. (no reason)","✅ I’m sorry, I can’t. I’m busy."]].map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td></tr>`).join("");
+/* ---------- ideas ---------- */
+const IDEAS=[
+{t:"1 · Role-play roulette",g:["15 min","pairs"],s:["Spin a situation. Two students read their cards.","Student B secretly checks if they must say yes or no.","Act it out. The audience ticks what they heard and gives points."]},
+{t:"2 · How polite is it?",g:["10 min","teams"],s:["Teams take turns choosing the best answer.","Discuss the 🙂 answers: how can we make them perfect?","Everyone repeats the 😊 sentence with polite intonation."]},
+{t:"3 · Build the sentence",g:["10 min","teams"],s:["A team member comes to the screen and taps the words.","The team can help — but only in English!","Then the whole team says it aloud."]},
+{t:"4 · Help chain",g:["10 min","whole class"],s:["Stand in a circle. Ask the next person for help.","They answer (yes or no + reason) and ask the next person.","Count the chain. Can the class beat its record?"]},
+{t:"5 · The polite / rude game",g:["5 min","fun"],s:["The teacher says a rude request: “Give me water!”","Students race to make it polite: “Could I have some water, please?”","Then try it the other way round!"]},
+{t:"6 · Mingle: favours",g:["10 min","mingle"],s:["Each student writes three favours they need (e.g. a lift to the airport).","They walk around and ask. Others say yes or no.","Who found help for all three favours first?"]}];
+$("#ideas").innerHTML=IDEAS.map(a=>`<div class="box act"><h3>${a.t}</h3>${a.g.map((x,i)=>`<span class="tag ${i?"te":""}">${x}</span>`).join("")}<ol>${a.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>`).join("");
+$("#plan").innerHTML=[["5 min","Warm-up: the polite / rude game"],["10 min","Language tab: can or could? The politeness ladder"],["10 min","How polite is it? (teams)"],["20 min","Role-play roulette: 5–6 pairs"],["10 min","Help chain or Build the sentence"],["5 min","Feedback: best sentences and common mistakes"]].map(p=>`<tr><td><b>${p[0]}</b></td><td>${p[1]}</td></tr>`).join("");
+/* ---------- print ---------- */
+const PR={
+roles:["Role-play cards","16 situations: A and B cards",()=>`<h1>Role-play cards</h1><div class="cut">${SC.map(s=>`<div><b>${s.e} ${esc(s.p)} · A</b> (${s.t==="req"?"request":"offer"})<br>${esc(s.a)}</div><div><b>${s.e} ${esc(s.p)} · B</b><br>${esc(s.b)}<br><i>Say yes or no?</i> Check your Yes/No card!</div>`).join("")}</div>`],
+yn:["Yes / No cards","Secret answer cards for Student B",()=>`<h1>Yes / No cards</h1><div class="cut yn">${Array.from({length:4},()=>`<div><b style="font-size:26pt">✅ YES</b>Sure! / Of course! / Yes, please!</div><div><b style="font-size:26pt">❌ NO</b>I’m sorry, I can’t… / No, thanks…<br>+ a reason!</div>`).join("")}</div>`],
+mat:["Language mat","Can / could + answers",()=>`<h1>Can You Help? Language mat</h1><table class="pt">${LB.map(r=>`<tr><td><b>${r[0].replace(/^\S+\s/,"")}</b></td><td>${esc(r[1])}<br><i>${esc(r[2])}</i></td></tr>`).join("")}</table><h2>Watch out!</h2><p>Could you help me? (not <s>to help</s>) · Answer “Sure!” (not <s>Yes, I could</s>) · “Yes, you can.” (not <s>you could</s>)</p>`],
+quiz:["Politeness worksheet","12 situations + answer key",()=>`<h1>How polite is it?</h1><p>Circle the best answer. Name: ____________</p><ol>${QZ.map(q=>`<li style="margin-bottom:3mm"><b>${esc(q.s)}</b><br>${q.o.map((o,j)=>`${"abc"[j]}) ${esc(o[0])}`).join(" &nbsp; ")}</li>`).join("")}</ol><p style="margin-top:6mm;font-size:9pt"><b>Key:</b> ${QZ.map((q,i)=>`${i+1}${"abc"[q.o.findIndex(o=>o[1]===2)]}`).join(" · ")}</p>`],
+write:["My requests","Writing: make it polite",()=>`<h1>Make it polite!</h1><p>Rewrite each sentence with can or could.</p>${["Give me the salt.","Help me.","I want to leave early.","Repeat that.","Open the door.","I use your phone."].map((s,i)=>`<p><b>${i+1}. ${s}</b></p><div class="ln"></div>`).join("")}<h2>Now write three requests you really need this week:</h2><div class="ln"></div><div class="ln"></div><div class="ln"></div>`]};
+Object.entries(PR).forEach(([k,[t,d]])=>{const b=document.createElement("div");b.className="box";b.innerHTML=`<h3>${t}</h3><p class="hint">${d}</p><button class="btn sun">🖨 Print</button>`;b.querySelector("button").onclick=()=>{$("#printArea").innerHTML=PR[k][2]();setTimeout(()=>print(),60)};$("#prGrid").appendChild(b)});
+/* ---------- start ---------- */
+score();q2();newB();
+</script>
+</body>
+</html>
